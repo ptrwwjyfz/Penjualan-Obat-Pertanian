@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
-import math,random,os
+import random,os
+
 class Bill_App:
     def __init__(s,t):
         s.t=t
@@ -41,11 +42,11 @@ class Bill_App:
         #customer
         s.cname=StringVar()
         s.cphn=StringVar()
-        
         s.billno=StringVar()
         x=random.randint(1000,9999)
         s.billno.set(str(x))
         s.search=StringVar()
+        
         #customer_detail
         f1=LabelFrame(s.t,text="Customer Details",bd=7,relief=GROOVE,bg="#32a671",fg="gold",font=("times new roman",15,"bold"))
         f1.place(x=0,y=80,relwidth=1)
@@ -137,17 +138,30 @@ class Bill_App:
         b3=Button(f7,text="Clear",bg="lime green",command=s.clear,fg="white",pady=15,width=10,bd=2,font="arial 15 bold").grid(row=0,column=2,padx=5,pady=5)
         b4=Button(f7,text="Exit",command=s.exit,bg="lime green",fg="white",pady=15,width=10,bd=2,font="arial 15 bold").grid(row=0,column=3,padx=5,pady=5)
         s.welcome()
+    
+    def validate_text_input(self, event):
+        value = self.cname.get()
+        if not value.isalpha() and value != "":
+            messagebox.showerror("Error", "Nama Pelanggan hanya boleh berisi huruf.")
+            self.cname.set("")
+    
+    def validate_number_input(self, event):
+        value = self.cphn.get()
+        if not value.isdigit() and value != "":
+            messagebox.showerror("Error", "Nomor Telepon hanya boleh berisi angka.")
+            self.cphn.set("")
+    
     def total(s):
-        s.a=s.a1.get()*40
+        s.a=s.a1.get()*400
         s.b=s.a2.get()*120
         s.c=s.a3.get()*60
         s.d=s.a4.get()*180
         s.e=s.a5.get()*140
         s.f=s.a6.get()*180
         s.totalOBAT=float(s.a+s.b+s.c+s.d+s.e+s.f)
-        s.d1.set("Rs. "+str(s.totalOBAT))
+        s.d1.set("Rp. "+str(s.totalOBAT))
         s.otax=round((s.totalOBAT*0.05),2)
-        s.f1.set("Rs. "+str(s.otax))
+        s.f1.set("Rp. "+str(s.otax))
         
         s.g=s.b1.get()*80
         s.h=s.b2.get()*110
@@ -156,9 +170,9 @@ class Bill_App:
         s.k=s.b5.get()*45
         s.l=s.b6.get()*80
         s.totalPUPUK=float(s.g+s.h+s.i+s.j+s.k+s.l)
-        s.d2.set("Rs. "+str(s.totalPUPUK))
+        s.d2.set("Rp. "+str(s.totalPUPUK))
         s.ptax=round((s.totalPUPUK*0.01),2)
-        s.f2.set("Rs. "+str(s.ptax))
+        s.f2.set("Rp. "+str(s.ptax))
         
         s.m=s.c1.get()*30
         s.n=s.c2.get()*40
@@ -167,18 +181,17 @@ class Bill_App:
         s.q=s.c5.get()*80
         s.r=s.c6.get()*100
         s.totalalat=float(s.m+s.n+s.o+s.p+s.q+s.r)
-        s.d3.set("Rs. "+str(s.totalalat))
+        s.d3.set("Rp. "+str(s.totalalat))
         s.dtax=round((s.totalalat*0.05),2)
-        s.f3.set("Rs. "+str(s.dtax))
+        s.f3.set("Rp. "+str(s.dtax))
         
         
         s.Total_bill=float(s.totalOBAT+s.totalPUPUK+s.totalalat+s.otax+s.ptax+s.dtax)
         
         
-        
     def welcome(s):
         s.txtarea.delete('1.0',END)
-        s.txtarea.insert(END,"\n\tWelcome Obat Pertanian")
+        s.txtarea.insert(END,"\n\t      Selamat Datang ")
         s.txtarea.insert(END,f"\n\n Bill Number :  {s.billno.get()}")
         s.txtarea.insert(END,f"\n Cutomer Name :   {s.cname.get()} ")
         s.txtarea.insert(END,f"\n Phone No :       {s.cphn.get()}")
@@ -189,9 +202,9 @@ class Bill_App:
         
     def billarea(s):
         if s.cname.get()=="" or s.cphn.get()=="":
-            messagebox.showerror("Error","Customer Detail are Must")
-        elif s.d1.get()=="Rs. 0.0" and s.d2.get()=="Rs. 0.0" and s.d3.get()=="Rs. 0.0":
-            messagebox.showerror("Error","No Product Purchased")
+            messagebox.showerror("Error","Customer Detail belum diisi")
+        elif s.d1.get()=="Rp. 0.0" and s.d2.get()=="Rp. 0.0" and s.d3.get()=="Rp. 0.0":
+            messagebox.showerror("Error","tidak ada produk yang dibeli")
         else:    
             s.welcome()
             #OBAT
@@ -222,7 +235,7 @@ class Bill_App:
                         s.txtarea.insert(END,f"\n NKCL \t\t  {s.b6.get()}\t\t{s.l}")
             #ALAT PERTANIAN
             if s.c1.get()!=0:
-                s.txtarea.insert(END,f"\n PACUL \t\t {s.c1.get()}\t\t{s.m}")
+                        s.txtarea.insert(END,f"\n PACUL \t\t {s.c1.get()}\t\t{s.m}")
             if s.c2.get()!=0:
                         s.txtarea.insert(END,f"\n ARIT \t\t  {s.c2.get()}\t\t{s.n}")
             if s.c3.get()!=0:
@@ -236,44 +249,46 @@ class Bill_App:
             
             
             s.txtarea.insert(END,f"\n--------------------------------------")
-            if s.f1.get()!="Rs. 0.0":
+            if s.f1.get()!="Rp. 0.0":
                 s.txtarea.insert(END,f"\n OBAT Tax \t\t\t {s.f1.get()}")
-            if s.f2.get()!="Rs. 0.0":
+            if s.f2.get()!="Rp. 0.0":
                 s.txtarea.insert(END,f"\n PUPUK Tax \t\t\t {s.f2.get()}")
-            if s.f2.get()!="Rs. 0.0":
+            if s.f2.get()!="Rp. 0.0":
                 s.txtarea.insert(END,f"\n ALAT PERTANIAN Tax \t\t\t {s.f3.get()}")
            
-            s.txtarea.insert(END,f"\n Total Bill :\t\t\t Rs. {s.Total_bill}")
+            s.txtarea.insert(END,f"\n Total Bill :\t\t\t Rp. {s.Total_bill}")
                 
             s.txtarea.insert(END,f"\n-------------------------------------")
             s.save_bill()
-    def save_bill(s):
-        op=messagebox.askyesno("Save Bill","Do you want to save the Bill?")
-        if op>0:
-            s.data=s.txtarea.get("1.0",END)
-            f1=open("bills/"+str(s.billno.get())+".txt","w")
-            f1.write(s.data)
-            f1.close()
-            messagebox.showinfo("Saved",f"Bill No : {s.billno.get()}  Saved Sucessfully ")
+  
+    def save_bill(self):
+        op = messagebox.askyesno("Save Bill", "Apakah Anda ingin menyimpan?")
+        if op > 0:
+            data = self.txtarea.get("1.0", END)
+            file_path = os.path.join("bills", f"{self.billno.get()}.txt")
+            with open(file_path, "w") as f:
+                f.write(data)
+            messagebox.showinfo("Saved", f"Bill No : {self.billno.get()}  Saved Successfully ")
         else:
             return
 
-    def findbill(s):
-        present="no"
+    def findbill(self):
+        present = "no"
         for i in os.listdir("bills/"):
-            if i.split('.')[0]==s.search.get():
-                f1=open(f"bills/{i}","r")
-                s.txtarea.delete('1.0',END)
-                for d in f1:
-                    s.txtarea.insert(END,d)
-                
-                f1.close()
-                present="yes"
-        if present=="no":
-            messagebox.showerror("Error","Invalid Bill No.")
-            
+            if i.split('.')[0] == self.search.get():
+                file_path = os.path.join("bills", i)
+                with open(file_path, "r") as f:
+                    data = f.read()
+                self.txtarea.delete('1.0', END)
+                self.txtarea.insert(END, data)
+                present = "yes"
+                break
+        if present == "no":
+            messagebox.showerror("Error", "Invalid Bill No.")
+
+
     def clear(s):
-        op=messagebox.askyesno("Clear","Do you really want to Clear?")
+        op=messagebox.askyesno("Clear","Apakah Anda benar-benar ingin menghapus?")
         if op>0:
 
             #---OBAT---
@@ -283,13 +298,13 @@ class Bill_App:
             s.a4.set(0)
             s.a5.set(0)
             s.a6.set(0)
-            
-            #---PUPUK---
+             #---PUPUK---
             s.b1.set(0)
-            s.b1.set(0)
-            s.b1.set(0)
-            s.b1.set(0)
-            s.b1.set(0)
+            s.b2.set(0)
+            s.b3.set(0)
+            s.b4.set(0)
+            s.b5.set(0)
+            s.b6.set(0)
             #----ALAT PERTANIAN----
             s.c1.set(0)
             s.c2.set(0)
@@ -315,7 +330,7 @@ class Bill_App:
             s.welcome()
             
     def exit(s):
-        op=messagebox.askyesno("Exit","Do you really want to exit?")
+        op=messagebox.askyesno("Exit","Apakah Anda benar-benar ingin keluar?")
         if op>0:
             s.t.destroy()
 t=Tk()
